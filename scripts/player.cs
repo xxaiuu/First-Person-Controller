@@ -48,8 +48,6 @@ public partial class player : CharacterBody3D
 		}
 	}
 
-
-
 	public override void _PhysicsProcess(double delta)
 	{
 		Vector3 velocity = Velocity;
@@ -57,7 +55,6 @@ public partial class player : CharacterBody3D
 		if(Input.IsActionJustPressed("EXIT")){
 			Input.MouseMode = Input.MouseModeEnum.Visible;	
 			
-
 		}
 
 		// Add the gravity.
@@ -71,7 +68,7 @@ public partial class player : CharacterBody3D
 		// Get the input direction and handle the movement/deceleration.
 		// As good practice, you should replace UI actions with custom gameplay actions.
 		Vector2 inputDir = Input.GetVector("left", "right", "up", "down");
-		Vector3 direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
+		Vector3 direction = (head.Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
 		if (direction != Vector3.Zero)
 		{
 			velocity.X = direction.X * Speed;
@@ -90,7 +87,7 @@ public partial class player : CharacterBody3D
 
 	// Helpers:
 	private float DegToRad(float degrees)
-    {
-        return degrees * Mathf.Pi / 180.0f;
-    }
+	{
+		return degrees * Mathf.Pi / 180.0f;
+	}
 }
