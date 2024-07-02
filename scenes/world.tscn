@@ -51,10 +51,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1479, 0)
 shape = SubResource("ConvexPolygonShape3D_wdho3")
 
 [node name="Head" type="Node3D" parent="player"]
-transform = Transform3D(1, 0, 0, 0, 0.999976, 0.00696381, 0, -0.00696381, 0.999976, 0, 1.80353, 0)
+transform = Transform3D(1, 0, 0, 0, 0.999976, 0.00696381, 0, -0.00696381, 0.999976, 0, 1.65977, 0)
 
 [node name="Camera3D" type="Camera3D" parent="player/Head"]
-fov = 93.0978
+transform = Transform3D(1, 0, 0, 0, 1, -9.9431e-11, 0, 1.6392e-10, 1, 0, 0.257506, -0.625159)
+keep_aspect = 0
+fov = 140.568
 
 [node name="Area" type="Node" parent="."]
 
