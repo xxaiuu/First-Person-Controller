@@ -139,20 +139,20 @@ public partial class player : CharacterBody3D
 
 
 	private Vector3 HeadBobOffset(float time)
-    {
-        Vector3 pos = Vector3.Zero;
-        pos.Y = Mathf.Sin(time * BobFrequency) * BobAmp;
+	{
+		Vector3 pos = Vector3.Zero;
+		pos.Y = Mathf.Sin(time * BobFrequency) * BobAmp;
 		pos.X = Mathf.Cos(time * BobFrequency/2) * BobAmp;	//I can't really tell the difference 
-        return pos;
-    }
+		return pos;
+	}
 
 	
-    private void UpdateCameraPosition(float time)
-    {
-        Vector3 headBobOffset = HeadBobOffset(time);
+	private void UpdateCameraPosition(float time)
+	{
+		Vector3 headBobOffset = HeadBobOffset(time);
 
-        // Set the camera's position relative to the character
-        Vector3 characterPosition = head.GlobalTransform.Origin; // Get character's current position
+		// Set the camera's position relative to the character
+		Vector3 characterPosition = head.GlobalTransform.Origin; // Get character's current position
 		camera.GlobalTransform = new Transform3D(Basis, characterPosition + headBobOffset);
 	}
 
