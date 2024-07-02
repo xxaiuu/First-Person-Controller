@@ -5,9 +5,12 @@ public partial class player : CharacterBody3D
 {
 	public const float Speed = 5.0f;
 	public const float JumpVelocity = 4.5f;
-	public const float Sensitivity = 0.01f;
+	public const float Sensitivity = 0.01f;	//look sensitivity
 
-
+	public const float BobFrequency = 2.0f;	//how often to bob the head
+	public const float BobAmp = 0.08f;	//how far up and down the camera goes
+	
+	private float t_bob = 0.0f;	//how far along the sine wave (bobbing motion)
 	private Node3D head;
 	private Camera3D camera;
 	
@@ -18,21 +21,20 @@ public partial class player : CharacterBody3D
 	public override void _Ready()
 	{
 		Input.MouseMode = Input.MouseModeEnum.Hidden;
-
+		head = GetNode<Node3D>("Head"); //$Head
+		camera = GetNode<Camera3D>("Head/Camera3D"); //$Head/Camera3D
 	}
 
 
 	public override void _UnhandledInput(InputEvent @event)
 	{
-	
-			
-		head = GetNode<Node3D>("Head"); //$Head
-		camera = GetNode<Camera3D>("Head/Camera3D"); //$Head/Camera3D
 
 		//base._UnhandledInput(@event);
 
 		if(@event is InputEventMouseMotion mouseMotion){
 			head.RotateY(-mouseMotion.Relative.X * Sensitivity);	//due to the translation between mouse and camera
+			RotateY(-mouseMotion.Relative.X * Sensitivity);	//rotates whole
+			
 			camera.RotateX(-mouseMotion.Relative.Y * Sensitivity);
 
 			if(camera != null){
@@ -80,14 +82,32 @@ public partial class player : CharacterBody3D
 			velocity.Z = 0;
 		}
 
+		
+						// time 	*	speed
+		t_bob += (float)delta * (float)velocity.Length() * (IsOnFloor() ? 1f : 0f);
+		UpdateCameraPosition(t_bob);
+
 		Velocity = velocity;
 		MoveAndSlide();
+
 	}
 
 
-	// Helpers:
-	private float DegToRad(float degrees)
-	{
-		return degrees * Mathf.Pi / 180.0f;
+	private Vector3 HeadBobOffset(float time)
+    {
+        Vector3 pos = Vector3.Zero;
+        pos.Y = Mathf.Sin(time * BobFrequency) * BobAmp;
+        return pos;
+    }
+
+	
+    private void UpdateCameraPosition(float time)
+    {
+        Vector3 headBobOffset = HeadBobOffset(time);
+
+        // Set the camera's position relative to the character
+        Vector3 characterPosition = head.GlobalTransform.Origin; // Get character's current position
+		camera.GlobalTransform = new Transform3D(Basis, characterPosition + headBobOffset);
 	}
+
 }
