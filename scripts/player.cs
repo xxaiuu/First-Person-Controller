@@ -17,20 +17,21 @@ public partial class player : CharacterBody3D
 	//Hides mouse once loaded in
 	public override void _Ready()
 	{
-		Input.MouseMode = Input.MouseModeEnum.Hidden;
+ 		head = GetNode<Node3D>("Head"); //$Head
+		camera = GetNode<Camera3D>("Head/Camera3D"); //$Head/Camera3D
+		Input.MouseMode = Input.MouseModeEnum.Captured;
 
 	}
 
 
+	public override void _Process(double delta)
+	{
+		if (!DisplayServer.WindowIsFocused()) Input.MouseMode = Input.MouseModeEnum.Visible;
+		else Input.MouseMode = Input.MouseModeEnum.Captured;
+	}
+
 	public override void _UnhandledInput(InputEvent @event)
 	{
-	
-			
-		head = GetNode<Node3D>("Head"); //$Head
-		camera = GetNode<Camera3D>("Head/Camera3D"); //$Head/Camera3D
-
-		//base._UnhandledInput(@event);
-
 		if(@event is InputEventMouseMotion mouseMotion){
 			head.RotateY(-mouseMotion.Relative.X * Sensitivity);	//due to the translation between mouse and camera
 			camera.RotateX(-mouseMotion.Relative.Y * Sensitivity);
@@ -83,11 +84,3 @@ public partial class player : CharacterBody3D
 		Velocity = velocity;
 		MoveAndSlide();
 	}
-
-
-	// Helpers:
-	private float DegToRad(float degrees)
-	{
-		return degrees * Mathf.Pi / 180.0f;
-	}
-}
